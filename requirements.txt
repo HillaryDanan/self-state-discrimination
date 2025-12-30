@@ -1,0 +1,24 @@
+# Self-State Discrimination Framework
+# Python 3.12 compatible - December 2025
+
+# LLM API clients
+anthropic>=0.40.0
+openai>=1.58.0
+google-genai>=1.0.0  # New SDK (replaces google-generativeai)
+
+# Data handling
+numpy>=2.1.0
+pandas>=2.2.0
+
+# Visualization
+matplotlib>=3.9.0
+seaborn>=0.13.0
+
+# Statistics
+scipy>=1.14.0
+
+# Environment management
+python-dotenv>=1.0.0
+
+# Progress bars
+tqdm>=4.67.0
