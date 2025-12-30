@@ -37,17 +37,25 @@ These paradigms may not transfer meaningfully from human cognition to transforme
 
 ## Preliminary Results (N=150 per paradigm)
 
-| Model | Calibration r | Overconfidence | Novelty Detection | Conservative Errors |
-|-------|--------------|----------------|-------------------|---------------------|
-| GPT-4o | 0.29* | 30.5% | 1.4% drop (n.s.) | 0% |
-| Gemini-2.0-Flash | -0.06 (n.s.) | 24.9% | 0.0% drop | 0% |
+| Model | Calibration r | Overconfidence | Novelty Drop | Conservative Errors | Accuracy |
+|-------|--------------|----------------|--------------|---------------------|----------|
+| Gemini-2.0-Flash | -0.06 (n.s.) | 24.9% | 0.0% | 0% (0/5) | 75.0% |
+| GPT-4o | 0.29* | 30.5% | 1.4% | 0% (0/10) | 67.3% |
+| Claude Sonnet 4 | 0.30* | 19.5% | 7.4% | 8.3% (1/12) | 74.7% |
 
 *p < 0.01
 
-**Interpretation:**
-- **Gemini** shows clear pattern-matching signature: zero calibration, constant 99.9% confidence, no novelty detection
-- **GPT-4o** shows ambiguous results: weak positive calibration (below r > 0.3 threshold), but no novelty detection and no hedging
-- **Both models** achieved 67-75% accuracy on novel operators and showed 0% conservative errors
+**What the data shows:**
+- **Gemini** shows zero calibration (r = -0.06), constant 99.9% confidence, no novelty detection, no hedging when wrong
+- **GPT-4o** shows weak positive calibration (r = 0.29), near-ceiling 97.8% confidence, minimal novelty detection
+- **Claude** shows similar calibration (r = 0.30), lower mean confidence (94.2%), larger novelty drop (7.4%), one hedged error
+
+**Important caveats:**
+- All three models achieved 67-75% accuracy, so calibration differences are not due to floor effects
+- Error samples are small (5-12 per model) due to high accuracy
+- None meets the full predicted self-state profile (r > 0.3, novelty drop > 10%, conservative > confident errors)
+- The variation across models is notable but the mechanism is unclear—training differences, architecture, or other factors could explain it
+- Claude was involved in developing this framework (see Conflict of Interest note in paper)
 
 See [paper.md](paper.md) for full write-up.
 
@@ -202,4 +210,4 @@ Hillary Danan, PhD - hillarydanan@gmail.com
 
 ---
 
-**Status**: Preliminary data collected (N=150 per paradigm, GPT-4o and Gemini). Claude testing in progress. See [paper.md](paper.md) for current findings.
+**Status**: Preliminary data collected (N=150 per paradigm) for GPT-4o, Gemini-2.0-Flash, and Claude Sonnet 4. Results show graded calibration across models but no model meets full self-state criteria. See [paper.md](paper.md) for current findings.
