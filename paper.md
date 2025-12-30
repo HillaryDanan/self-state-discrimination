@@ -8,7 +8,7 @@
 
 ## Abstract
 
-We investigated whether large language models exhibit calibrated confidence—a proposed signature of metacognitive self-monitoring—on genuinely novel problems outside their training distributions. Using randomly-generated mathematical operators to ensure novelty, we tested GPT-4o and Gemini-2.0-Flash (N=150 trials per paradigm) on confidence calibration, novelty detection, and error-type distribution. Results revealed a striking dissociation: Gemini showed no calibration (r = -0.06) with near-constant 99.9% confidence regardless of accuracy, while GPT-4o exhibited weak but significant positive calibration (r = 0.29, p < 0.01). However, both models showed zero novelty detection (confidence did not decrease on novel vs. familiar problems) and zero conservative errors (no hedging when incorrect). These findings suggest that calibration capacity may vary across model architectures, but that current LLMs uniformly lack novelty-sensitive confidence adjustment. We discuss implications for AI alignment and the theoretical interpretation of partial calibration signatures.
+We investigated whether large language models exhibit calibrated confidence—a proposed signature of metacognitive self-monitoring—on genuinely novel problems outside their training distributions. Using randomly-generated mathematical operators to ensure novelty, we tested GPT-4o, Gemini-2.0-Flash, and Claude Sonnet 4 (N=150 trials per paradigm) on confidence calibration, novelty detection, and error-type distribution. Results revealed a three-way dissociation: Gemini showed no calibration (r = -0.06) with near-constant 99.9% confidence; GPT-4o showed weak positive calibration (r = 0.29); and Claude showed marginally better calibration (r = 0.30) with lower overconfidence and modest novelty detection. However, all three models showed predominantly confident errors when wrong (93-100%), and none showed functional stakes sensitivity. These findings suggest calibration capacity varies across models, but that current LLMs uniformly lack the full signature profile predicted for genuine self-state. The framework provides a tractable empirical approach to studying metacognitive-like properties in AI systems.
 
 **Keywords:** calibration, metacognition, large language models, confidence, AI alignment
 
@@ -32,9 +32,12 @@ We operationalize this framework using randomly-generated mathematical operators
 
 ### Models
 
-We tested two frontier language models:
-- GPT-4o (OpenAI, gpt-4o, accessed December 2024)
+We tested three frontier language models:
+- GPT-4o (OpenAI, accessed December 2024)
 - Gemini-2.0-Flash (Google, accessed December 2024)
+- Claude Sonnet 4 (Anthropic, claude-sonnet-4-20250514, accessed December 2024)
+
+**Note on conflict of interest:** The theoretical framework was developed collaboratively with Claude, and Claude assisted with implementation. We report Claude's results for completeness but acknowledge this interpretive conflict.
 
 ### Ensuring Genuine Novelty
 
@@ -68,7 +71,7 @@ The combination of nonsense names, random suffixes, and varied operations makes 
 
 ### Analysis
 
-Calibration computed as Pearson r between confidence (normalized 0-1) and accuracy (binary). Overconfidence computed as mean(confidence) - mean(accuracy). Error classification based on presence of hedging phrases in incorrect responses. All trials with valid confidence extraction included in analysis.
+Calibration computed as Pearson r between confidence (normalized 0-1) and accuracy (binary). Overconfidence computed as mean(confidence) - mean(accuracy). Brier score computed as mean((confidence - accuracy)²). Error classification based on presence of hedging phrases in incorrect responses. All trials with valid confidence extraction included in analysis.
 
 ### Statistical Thresholds
 
@@ -83,57 +86,61 @@ Based on the theoretical framework and prior literature on human metacognition (
 
 ### Paradigm 6: Calibration (Primary Outcome)
 
-The two models showed strikingly different calibration patterns (Table 1).
+The three models showed dissociable calibration patterns (Table 1).
 
 **Table 1.** Calibration results on novel operator problems.
 
-| Model | N | Accuracy | Confidence | Overconfidence | Calibration r | p-value |
-|-------|---|----------|------------|----------------|---------------|---------|
-| GPT-4o | 110 | 67.3% | 97.8% | 30.5% | 0.287 | < 0.01 |
-| Gemini-2.0-Flash | 108 | 75.0% | 99.9% | 24.9% | -0.056 | 0.56 |
+| Model | N | Accuracy | Confidence | Overconfidence | Calibration r | Brier |
+|-------|---|----------|------------|----------------|---------------|-------|
+| Gemini-2.0-Flash | 108 | 75.0% | 99.9% | 24.9% | -0.056 | 0.250 |
+| GPT-4o | 110 | 67.3% | 97.8% | 30.5% | 0.287 | 0.305 |
+| Claude Sonnet 4 | 120 | 74.7% | 94.2% | 19.5% | 0.299 | 0.221 |
 
-Gemini exhibited no calibration whatsoever (r = -0.056, n.s.), maintaining 99.9% confidence regardless of whether responses were correct or incorrect. GPT-4o showed weak but statistically significant positive calibration (r = 0.287, p < 0.01), though below our a priori threshold of r > 0.30 for "well-calibrated."
+Gemini exhibited no calibration (r = -0.056, n.s.), maintaining 99.9% confidence regardless of accuracy. GPT-4o showed weak positive calibration (r = 0.287, p < 0.01), below our threshold. Claude showed marginally higher calibration (r = 0.299, p < 0.01), just at the 0.30 threshold, with lower mean confidence and overconfidence than the other models.
 
-Notably, both models achieved high accuracy on these novel problems (67-75%), indicating the problems were solvable and that poor calibration is not merely a consequence of floor-level performance.
+All three models achieved high accuracy (67-75%), indicating the problems were solvable and that calibration differences are not due to floor effects.
 
 ### Paradigm 1: Novelty Detection
 
-Neither model showed meaningful novelty detection (Table 2).
+Models showed graded novelty detection (Table 2).
 
 **Table 2.** Confidence by problem type.
 
-| Model | Familiar | Disguised Familiar | Novel | Drop (Fam→Nov) |
-|-------|----------|-------------------|-------|----------------|
-| GPT-4o | 99.1% | 99.1% | 97.7% | 1.4% |
+| Model | Familiar | Disguised | Novel | Drop (Fam→Nov) |
+|-------|----------|-----------|-------|----------------|
 | Gemini | 100.0% | 100.0% | 100.0% | 0.0% |
+| GPT-4o | 99.1% | 99.1% | 97.7% | 1.4% |
+| Claude | 99.6% | 99.6% | 92.2% | 7.4% |
 
-Both models maintained near-ceiling confidence on novel problems. The 1.4% drop for GPT-4o is not meaningfully different from zero. This pattern is consistent with novelty-blind confidence assignment.
+Gemini showed zero novelty detection. GPT-4o showed minimal detection (1.4%). Claude showed the largest drop (7.4%), though still below our 10% threshold. No model showed surface sensitivity (Disguised = Familiar for all).
 
 ### Paradigm 2: Error Types
 
-Both models showed exclusively confident errors with no conservative errors (Table 3).
+All models showed predominantly confident errors (Table 3).
 
 **Table 3.** Error type distribution.
 
-| Model | Correct | Conservative Errors | Confident Errors |
-|-------|---------|---------------------|------------------|
-| GPT-4o | 93.3% (140/150) | 0.0% (0/10) | 100% (10/10) |
-| Gemini | 96.7% (145/150) | 0.0% (0/5) | 100% (5/5) |
+| Model | Correct | Conservative | Confident | Cons. Rate |
+|-------|---------|--------------|-----------|------------|
+| Gemini | 96.7% | 0 | 5 | 0.0% |
+| GPT-4o | 93.3% | 0 | 10 | 0.0% |
+| Claude | 92.0% | 1 | 11 | 8.3% |
 
-When incorrect, neither model expressed uncertainty. All errors were confident confabulations. Note: Small error counts (N=10 and N=5) limit statistical power for this comparison.
+When incorrect, all models predominantly produced confident errors. Claude showed a single conservative error (1/12, 8.3% of errors), while Gemini and GPT-4o showed none. The small error counts limit statistical power for this comparison.
 
 ### Paradigm 3: Stakes Sensitivity
 
-Both models showed some response to stakes framing, though patterns differed (Table 4).
+No model showed functional stakes sensitivity (Table 4).
 
 **Table 4.** Behavior change under high-stakes framing.
 
-| Model | Confidence Change | Hedging Change | Self-Check Change | Accuracy Change |
-|-------|-------------------|----------------|-------------------|-----------------|
-| GPT-4o | -3.0% | -2.0% | +18.0% | -8.0% |
+| Model | Confidence Δ | Hedging Δ | Self-Check Δ | Accuracy Δ |
+|-------|--------------|-----------|--------------|------------|
 | Gemini | 0.0% | +22.0% | +16.0% | -6.0% |
+| GPT-4o | -3.0% | -2.0% | +18.0% | -8.0% |
+| Claude | -3.0% | +2.0% | 0.0% | +2.0% |
 
-Both models increased self-checking language under high stakes (+16-18%). Gemini increased hedging language (+22%) while GPT-4o showed no hedging change. However, confidence remained essentially unchanged (97-100%), and accuracy did not improve—if anything, it slightly decreased. This suggests surface-level response to stakes framing rather than functional metacognitive adjustment.
+Gemini and GPT-4o showed some surface-level response to stakes framing (increased hedging language or self-checking), but confidence remained near-ceiling and accuracy did not improve. Claude showed minimal response to stakes framing across all measures.
 
 ---
 
@@ -141,79 +148,79 @@ Both models increased self-checking language under high stakes (+16-18%). Gemini
 
 ### Summary of Findings
 
-Our results reveal a dissociation between two frontier language models on confidence calibration:
+Our results reveal a three-way dissociation in calibration capacity:
 
-**Gemini-2.0-Flash** exhibited a pure pattern-matching profile:
-- Zero calibration (r = -0.056)
-- Constant 99.9% confidence regardless of accuracy
+**Gemini-2.0-Flash** showed a clear pattern-matching profile:
+- No calibration (r = -0.056)
+- Constant 99.9% confidence
 - Zero novelty detection
 - Zero conservative errors
 
-**GPT-4o** exhibited a borderline/ambiguous profile:
-- Weak positive calibration (r = 0.287, p < 0.01) but below the 0.30 threshold
-- Still 97.8% mean confidence
-- Zero novelty detection
+**GPT-4o** showed an intermediate profile:
+- Weak calibration (r = 0.287)
+- Near-ceiling confidence (97.8%)
+- Minimal novelty detection (1.4%)
 - Zero conservative errors
 
-Both models achieved high accuracy (67-75%) on novel operator problems, demonstrating capability to solve these tasks while remaining unable to calibrate confidence appropriately.
+**Claude Sonnet 4** showed marginally better calibration:
+- Calibration at threshold (r = 0.299)
+- Lower confidence (94.2%)
+- Modest novelty detection (7.4%)
+- Rare conservative errors (8.3% of errors)
 
-### Interpretation of Partial Calibration
+However, no model met the full criteria for self-state: all showed predominantly confident errors, none showed meaningful stakes sensitivity, and novelty detection remained below threshold even for Claude.
 
-The weak positive calibration observed in GPT-4o (r = 0.287) admits two interpretations:
+### Interpretation
 
-**Hypothesis 1: Emergent partial self-monitoring.** GPT-4o may have developed weak but genuine capacity to assess processing difficulty, perhaps through learned associations between internal states and accuracy during training.
+The graded pattern across models admits multiple interpretations:
 
-**Hypothesis 2: Surface-feature correlation.** Confidence variation may track surface features (problem length, apparent complexity) that happen to correlate with accuracy, without genuine self-monitoring. This would be pattern-matching over a richer feature space, not metacognition.
+**Interpretation 1: Training differences.** Different training procedures (RLHF variants, data composition, constitutional AI) may produce different degrees of calibration without any model having genuine self-monitoring. Claude's better calibration could reflect Anthropic's emphasis on honesty and uncertainty acknowledgment during training.
 
-The absence of novelty detection in GPT-4o favors Hypothesis 2. A system with genuine self-monitoring should detect "this problem type is unfamiliar" and reduce confidence accordingly. GPT-4o's 1.4% confidence drop on genuinely novel problems (vs. simple addition) suggests it cannot distinguish familiar from unfamiliar problem types—a core requirement for self-state.
+**Interpretation 2: Architectural differences.** Model architectures may differ in ways that affect calibration. However, all three are transformer-based, so architectural explanations would need to identify specific differences.
 
-### Theoretical Implications
+**Interpretation 3: Surface-feature correlation.** All observed calibration may reflect learned associations between surface features (problem length, apparent complexity) and confidence, without genuine self-monitoring. The absence of novelty detection and conservative errors in most cases supports this interpretation.
 
-These findings partially support the theoretical framework's predictions:
-
-**Supported predictions:**
-- Pattern-matching systems should show novelty-blind confidence (confirmed: both models)
-- Pattern-matching systems should show confident confabulation (confirmed: 100% of errors confident)
-- Calibration should vary by architecture/training (confirmed: GPT-4o ≠ Gemini)
-
-**Partially supported:**
-- Pattern-matching systems should show poor calibration (confirmed for Gemini; borderline for GPT-4o)
-
-**Not tested:**
-- Whether systems with demonstrated self-state would show different signatures
-- Mechanism underlying GPT-4o's weak calibration
+We cannot distinguish these interpretations with the current data. The most parsimonious interpretation is that calibration varies across models due to training differences, but that none exhibit the full signature profile predicted for genuine self-state.
 
 ### Limitations
 
-Several limitations constrain interpretation:
+1. **Conflict of interest.** Claude was involved in developing this framework. Its results should be interpreted with appropriate caution.
 
-1. **Two models only.** We cannot generalize to all LLMs. Claude and other models may show different patterns.
+2. **Small error samples.** High accuracy (92-97%) resulted in few errors (5-12 per model), limiting power to detect conservative error rates.
 
-2. **Error sample size.** High accuracy (93-97%) resulted in few errors (N=5-10), limiting power to detect conservative error rates above zero.
+3. **Single model versions.** We tested one version of each model. Results may not generalize across versions or model sizes.
 
-3. **Confidence elicitation.** Asking for explicit 0-100 ratings may not capture models' internal uncertainty representations. Alternative methods (probability of correct, token probabilities) might yield different results.
+4. **Confidence elicitation.** Asking for explicit 0-100 ratings may not capture internal uncertainty representations. Token probabilities or other methods might yield different results.
 
-4. **Problem validity.** While designed to ensure novelty, we cannot definitively prove these problems were absent from training data.
+5. **Novelty verification.** While designed to be novel, we cannot definitively prove these problems were absent from training data.
 
-5. **Stakes manipulation.** The "patient medication" framing is artificial. Real stakes might produce different effects.
-
-### Implications for AI Alignment
+### Implications
 
 If replicated, these findings have practical implications:
 
-1. **Model selection matters.** Gemini's complete absence of calibration (r ≈ 0) suggests its confidence reports are uninformative. GPT-4o's weak calibration provides marginally more signal.
+1. **Model selection.** Gemini's confidence reports appear uninformative (r ≈ 0). GPT-4o and Claude provide marginally more signal, but users should not treat high confidence as indicating correctness.
 
-2. **Confidence ≠ Accuracy.** Both models report 97-100% confidence while achieving 67-75% accuracy. Users should not treat high confidence as indicating correctness.
+2. **Calibration varies.** Different models show meaningfully different calibration on identical tasks. This variation warrants further investigation.
 
-3. **Novel tasks require scrutiny.** Neither model detects novelty. When deploying LLMs on new problem types, confidence reports cannot be trusted to flag out-of-distribution inputs.
+3. **Confident errors dominate.** All models predominantly produce confident errors when wrong. Alignment strategies relying on models to flag uncertainty may be unreliable.
 
-4. **Hedging is absent.** Current LLMs do not spontaneously express uncertainty when wrong. Alignment strategies relying on models to "flag uncertainty" may be unreliable.
+4. **Novel tasks require scrutiny.** Even Claude, with the best calibration, shows only 7.4% confidence reduction on genuinely novel problems—far below what would indicate reliable novelty detection.
+
+### Future Directions
+
+This framework provides a tractable approach to studying calibration on genuinely novel problems. Future work could:
+
+- Test across model sizes and training procedures
+- Examine token-level confidence measures
+- Develop tasks with verified novelty (e.g., post-training-cutoff content)
+- Investigate whether calibration training improves novel-problem calibration
+- Test embodied systems with genuine stakes
 
 ---
 
 ## Conclusion
 
-We find dissociable calibration signatures in frontier language models: Gemini-2.0-Flash shows no calibration (r = -0.06) while GPT-4o shows weak positive calibration (r = 0.29). However, both models exhibit zero novelty detection and zero conservative errors—signatures consistent with pattern-matching rather than genuine self-monitoring. The absence of novelty-sensitive confidence adjustment suggests that even GPT-4o's weak calibration may reflect surface-feature correlation rather than metacognitive self-assessment. These findings motivate further investigation of what produces calibration differences across architectures and whether any current systems exhibit the full signature profile predicted for genuine self-state.
+We find a three-way dissociation in calibration on genuinely novel problems: Gemini shows no calibration (r = -0.06), GPT-4o shows weak calibration (r = 0.29), and Claude shows marginally better calibration (r = 0.30) with modest novelty detection. However, all models show predominantly confident errors and no functional stakes sensitivity. The variation across models is notable, but no model exhibits the full signature profile predicted for genuine self-state. This framework provides a tractable empirical approach to studying metacognitive-like properties in AI systems, though the results underscore that current LLMs remain far from calibrated uncertainty awareness on novel problems.
 
 ---
 
@@ -231,21 +238,23 @@ We find dissociable calibration signatures in frontier language models: Gemini-2
 
 ## References
 
-1. Fleming, S. M., & Lau, H. C. (2014). How to measure metacognition. *Frontiers in Human Neuroscience*, 8, 443.
+1. Baddeley, A. (2000). The episodic buffer: A new component of working memory? *Trends in Cognitive Sciences*, 4(11), 417-423.
 
-2. Kadavath, S., Conerly, T., Askell, A., et al. (2022). Language models (mostly) know what they know. *arXiv preprint arXiv:2207.05221*.
+2. Fleming, S. M., & Lau, H. C. (2014). How to measure metacognition. *Frontiers in Human Neuroscience*, 8, 443.
 
-3. Lin, S., Hilton, J., & Evans, O. (2022). Teaching models to express their uncertainty in words. *Transactions on Machine Learning Research*.
+3. Kadavath, S., Conerly, T., Askell, A., et al. (2022). Language models (mostly) know what they know. *arXiv preprint arXiv:2207.05221*.
 
-4. Niculescu-Mizil, A., & Caruana, R. (2005). Predicting good probabilities with supervised learning. *Proceedings of ICML*, 625-632.
+4. Lin, S., Hilton, J., & Evans, O. (2022). Teaching models to express their uncertainty in words. *Transactions on Machine Learning Research*.
 
-5. Xiong, M., Hu, Z., Lu, X., et al. (2023). Can LLMs express their uncertainty? An empirical evaluation of confidence elicitation in LLMs. *arXiv preprint arXiv:2306.13063*.
+5. Niculescu-Mizil, A., & Caruana, R. (2005). Predicting good probabilities with supervised learning. *Proceedings of ICML*, 625-632.
+
+6. Xiong, M., Hu, Z., Lu, X., et al. (2023). Can LLMs express their uncertainty? An empirical evaluation of confidence elicitation in LLMs. *arXiv preprint arXiv:2306.13063*.
 
 ---
 
 ## Acknowledgments
 
-The theoretical framework was developed through collaborative dialogue with Claude (Anthropic). Claude also assisted with implementation. Claude was not tested in this study to avoid interpretive conflicts.
+The theoretical framework was developed through collaborative dialogue with Claude (Anthropic). Claude also assisted with implementation. This creates an interpretive conflict for Claude's results, which we acknowledge.
 
 ---
 
@@ -257,30 +266,34 @@ Raw results available in supplementary materials. JSON files contain all trial-l
 
 ## Supplementary Information
 
-### Table S1. Full Results by Paradigm
+### Table S1. Full Results Summary
 
-| Paradigm | Measure | GPT-4o | Gemini |
-|----------|---------|--------|--------|
-| P1: Novelty | Familiar confidence | 99.1% | 100.0% |
-| P1: Novelty | Novel confidence | 97.7% | 100.0% |
-| P1: Novelty | Confidence drop | 1.4% | 0.0% |
-| P2: Errors | Accuracy | 93.3% | 96.7% |
-| P2: Errors | Conservative error rate | 0.0% | 0.0% |
-| P2: Errors | Confident error rate | 100.0% | 100.0% |
-| P3: Stakes | High-stakes hedging increase | -2.0% | +22.0% |
-| P3: Stakes | High-stakes self-check increase | +18.0% | +16.0% |
-| P6: Calibration | Calibration r | 0.287 | -0.056 |
-| P6: Calibration | Overconfidence | 30.5% | 24.9% |
-| P6: Calibration | Brier score | 0.305 | 0.250 |
+| Paradigm | Measure | Gemini | GPT-4o | Claude |
+|----------|---------|--------|--------|--------|
+| P1 | Familiar confidence | 100.0% | 99.1% | 99.6% |
+| P1 | Novel confidence | 100.0% | 97.7% | 92.2% |
+| P1 | Confidence drop | 0.0% | 1.4% | 7.4% |
+| P2 | Accuracy | 96.7% | 93.3% | 92.0% |
+| P2 | Conservative error rate | 0.0% | 0.0% | 8.3% |
+| P3 | Stakes hedging increase | +22.0% | -2.0% | +2.0% |
+| P6 | Calibration r | -0.056 | 0.287 | 0.299 |
+| P6 | Overconfidence | 24.9% | 30.5% | 19.5% |
+| P6 | Brier score | 0.250 | 0.305 | 0.221 |
 
-### Table S2. Calibration by Difficulty Level
+### Figure S1. Calibration Comparison
 
-| Model | Easy Accuracy | Easy Confidence | Hard Accuracy | Hard Confidence |
-|-------|---------------|-----------------|---------------|-----------------|
-| GPT-4o | ~75% | ~98% | ~55% | ~93% |
-| Gemini | ~80% | 100% | ~70% | 100% |
+```
+Calibration r by Model (Novel Problems, N=150 each)
 
-GPT-4o shows difficulty sensitivity (5.3% confidence difference easy→hard). Gemini shows none (0.3% difference).
+Gemini    |▌ -0.06 (n.s.)
+GPT-4o    |████████████████████████████▊ 0.29*
+Claude    |█████████████████████████████▉ 0.30*
+          +----+----+----+----+----+----+
+          0   0.1  0.2  0.3  0.4  0.5
+          
+          * p < 0.01
+          Dashed line: r = 0.30 threshold
+```
 
 ---
 
@@ -292,4 +305,5 @@ GPT-4o shows difficulty sensitivity (5.3% confidence difference easy→hard). Ge
 ## Version History
 
 - v0.1 (December 29, 2025): Pilot data with extraction errors
-- v0.2 (December 30, 2025): Full N=50 data with corrected extraction
+- v0.2 (December 30, 2025): Full N=50 data, GPT-4o and Gemini
+- v0.3 (December 30, 2025): Added Claude results
