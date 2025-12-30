@@ -146,6 +146,7 @@ P6: Calibration r > 0.3
 self-state-discrimination/
 ├── run_experiments.py        # Main runner
 ├── diagnose.py               # Debug individual responses
+├── debug_results.py          # Results debugging utilities
 ├── paper.md                  # Preliminary findings write-up
 ├── requirements.txt
 ├── .env.example
@@ -164,9 +165,10 @@ self-state-discrimination/
 │   └── scoring.py            # Response parsing & calibration
 │
 ├── analysis/
-│   └── analyze_results.py    # Visualization & interpretation
+│   ├── analyze_results.py    # Statistical analysis
+│   └── visualize.py          # Result visualization
 │
-└── results/                  # Output JSON files
+└── results/                  # Output JSON files & figures
 ```
 
 ## Theoretical Background
