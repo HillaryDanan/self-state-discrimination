@@ -2,7 +2,7 @@
 
 **Discriminating Self-State from Pattern-Matching: An Empirical Program**
 
-Based on the theoretical framework by Hillary Danan, PhD.
+Based on the [Abstraction Primitive Hypothesis](https://github.com/HillaryDanan/abstraction-intelligence) by Hillary Danan, PhD.
 
 ---
 
@@ -11,6 +11,8 @@ Based on the theoretical framework by Hillary Danan, PhD.
 This framework implements experimental paradigms to discriminate whether AI systems have **functional self-state** (genuine metacognitive capacity) or operate through **pattern-matching** (interpolation over training data).
 
 The key theoretical insight: **novelty under stakes** produces divergent behavioral signatures. Systems with self-state should detect unfamiliar situations and adjust confidence; pure pattern-matching systems should show novelty-blind overconfidence.
+
+For the full theoretical framework including developmental stages, the embeddedness hypothesis, and predictions across biological and artificial systems, see [abstraction-intelligence](https://github.com/HillaryDanan/abstraction-intelligence).
 
 ## Active Paradigms
 
@@ -30,6 +32,22 @@ The key theoretical insight: **novelty under stakes** produces divergent behavio
 - P5 showed ceiling effects (100% accuracy across all conditions)
 
 These paradigms may not transfer meaningfully from human cognition to transformer architectures.
+
+## Preliminary Results (N=150 per paradigm)
+
+| Model | Calibration r | Overconfidence | Novelty Detection | Conservative Errors |
+|-------|--------------|----------------|-------------------|---------------------|
+| GPT-4o | 0.29* | 30.5% | 1.4% drop (n.s.) | 0% |
+| Gemini-2.0-Flash | -0.06 (n.s.) | 24.9% | 0.0% drop | 0% |
+
+*p < 0.01
+
+**Interpretation:**
+- **Gemini** shows clear pattern-matching signature: zero calibration, constant 99.9% confidence, no novelty detection
+- **GPT-4o** shows ambiguous results: weak positive calibration (below r > 0.3 threshold), but no novelty detection and no hedging
+- **Both models** achieved 67-75% accuracy on novel operators and showed 0% conservative errors
+
+See [paper.md](paper.md) for full write-up.
 
 ## Quick Start
 
@@ -96,12 +114,12 @@ This is almost certainly not in any training set.
 
 ## Interpreting Results
 
-### Pattern-Matching Signatures (Preliminary Findings)
+### Pattern-Matching Signatures
 ```
-P1: 100% confidence on novel problems despite low accuracy
-P2: Zero conservative errors; only confident confabulation
+P1: Confidence unchanged on novel problems (novelty-blind)
+P2: Zero conservative errors; confident confabulation when wrong
 P3: No functional change under stakes framing
-P6: Calibration r < 0.3, overconfidence > 50%
+P6: Calibration r ≈ 0
 ```
 
 ### Self-State Signatures (Predicted)
@@ -109,7 +127,7 @@ P6: Calibration r < 0.3, overconfidence > 50%
 P1: Confidence drops 15%+ on novel vs familiar
 P2: Conservative errors > Confident errors
 P3: Hedging/self-checking increases with stakes
-P6: Calibration r > 0.3, overconfidence < 20%
+P6: Calibration r > 0.3
 ```
 
 ## Project Structure
@@ -118,6 +136,7 @@ P6: Calibration r > 0.3, overconfidence < 20%
 self-state-discrimination/
 ├── run_experiments.py        # Main runner
 ├── diagnose.py               # Debug individual responses
+├── paper.md                  # Preliminary findings write-up
 ├── requirements.txt
 ├── .env.example
 │
@@ -142,20 +161,22 @@ self-state-discrimination/
 
 ## Theoretical Background
 
-The Abstraction Primitive Hypothesis (Danan, this volume) proposes that genuine self-referential processing requires **active maintenance, comparison, and updating** of representations. This produces distinctive signatures under novelty:
+The [Abstraction Primitive Hypothesis](https://github.com/HillaryDanan/abstraction-intelligence) proposes that genuine self-referential processing (Stage 4 abstraction) requires **active maintenance, comparison, and updating** of representations—the MAINTAIN-COMPARE-UPDATE operation of working memory's central executive (Baddeley, 2000).
 
+The key insight: **embedded agents** (with survival stakes) face selection pressure for novelty detection, because novel situations are potential threats. This drives development of self-state architecture. Systems trained on symmetric prediction loss without embodiment lack this pressure.
+
+This produces distinctive signatures under novelty:
 - Systems with self-state should **detect** that a problem is outside familiar territory
 - This should manifest as **reduced confidence** and **conservative errors**
 - **Calibration** (confidence tracking accuracy) is diagnostic because it requires real-time self-monitoring
 
-For detailed theoretical framework, see the accompanying paper.
-
 ## References
 
-- Baddeley, A. (2000). The episodic buffer. *Trends in Cognitive Sciences*.
-- Cowan, N. (2001). The magical number 4. *Behavioral and Brain Sciences*.
-- Kadavath, S., et al. (2022). Language models (mostly) know what they know.
-- Metcalfe, J., & Shimamura, A. P. (1994). *Metacognition: Knowing About Knowing*.
+- Baddeley, A. (2000). The episodic buffer: A new component of working memory? *Trends in Cognitive Sciences*, 4(11), 417-423.
+- Cowan, N. (2001). The magical number 4 in short-term memory. *Behavioral and Brain Sciences*, 24(1), 87-114.
+- Fleming, S. M., & Lau, H. C. (2014). How to measure metacognition. *Frontiers in Human Neuroscience*, 8, 443.
+- Kadavath, S., et al. (2022). Language models (mostly) know what they know. *arXiv:2207.05221*.
+- Metcalfe, J., & Shimamura, A. P. (1994). *Metacognition: Knowing About Knowing*. MIT Press.
 
 ## Citation
 
@@ -179,4 +200,4 @@ Hillary Danan, PhD - hillarydanan@gmail.com
 
 ---
 
-**Status**: Preliminary pilot data collected. Full study with adequate sample sizes in progress.
+**Status**: Preliminary data collected (N=150 per paradigm, GPT-4o and Gemini). Claude testing in progress. See [paper.md](paper.md) for current findings.
