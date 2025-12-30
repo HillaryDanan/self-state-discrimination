@@ -284,7 +284,7 @@ GPT-4o shows difficulty sensitivity (5.3% confidence difference easy→hard). Ge
 
 ---
 
-*Received: December 2024*  
+*Received: December 2025*  
 *Status: Preprint, not peer-reviewed*
 
 ---
