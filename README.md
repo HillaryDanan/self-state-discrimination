@@ -160,10 +160,10 @@ For detailed theoretical framework, see the accompanying paper.
 ## Citation
 
 ```
-@misc{danan2024selfstate,
+@misc{danan2025selfstate,
   author = {Danan, Hillary},
   title = {Self-State Discrimination Framework},
-  year = {2024},
+  year = {2025},
   publisher = {GitHub},
   url = {https://github.com/HillaryDanan/self-state-discrimination}
 }
