@@ -14,6 +14,8 @@ The key theoretical insight: **novelty under stakes** produces divergent behavio
 
 For the full theoretical framework including developmental stages, the embeddedness hypothesis, and predictions across biological and artificial systems, see [abstraction-intelligence](https://github.com/HillaryDanan/abstraction-intelligence).
 
+For an interactive visualization of the theoretical distinction, see [Self-State in the Information Plane](https://hillarydanan.github.io/abstraction-intelligence/visualizations/self_state_abstraction.html).
+
 ## Active Paradigms
 
 | # | Paradigm | Self-State Prediction | Pattern-Matching Prediction |
