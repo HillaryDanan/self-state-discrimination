@@ -291,5 +291,5 @@ GPT-4o shows difficulty sensitivity (5.3% confidence difference easy→hard). Ge
 
 ## Version History
 
-- v0.1 (December 29, 2024): Pilot data with extraction errors
-- v0.2 (December 30, 2024): Full N=50 data with corrected extraction
+- v0.1 (December 29, 2025): Pilot data with extraction errors
+- v0.2 (December 30, 2025): Full N=50 data with corrected extraction
